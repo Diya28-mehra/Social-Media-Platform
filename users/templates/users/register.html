@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        /* Container Styling */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Heading Styling */
+        h2.my-4 {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        /* Form Styling */
+        .custom-form {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Group Styling */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* Label Styling */
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        /* Input Field Styling */
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Button Styling */
+        .btn-submit {
+            background-color: #e83e8c; /* SociBook Pink */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .btn-submit:hover {
+            background-color: #d6336c; /* Slightly darker pink for hover effect */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="my-4">Register</h2>
+        <form method="post" class="custom-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_first_name">First name:</label>
+                <input type="text" name="first_name" id="id_first_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="id_last_name">Last name:</label>
+                <input type="text" name="last_name" id="id_last_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="id_username">Username:</label>
+                <input type="text" name="username" id="id_username" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="id_email">Email:</label>
+                <input type="email" name="email" id="id_email" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="id_password">Password:</label>
+                <input type="password" name="password" id="id_password" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="id_confirm_password">Confirm Password:</label>
+                <input type="password" name="confirm_password" id="id_confirm_password" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="id_date_of_birth">Date of Birth:</label>
+                <input type="date" name="date_of_birth" id="id_date_of_birth" class="form-control" required>
+            </div>
+            <button type="submit" class="btn-submit">Register</button>
+        </form>
+    </div>
+</body>
+</html>

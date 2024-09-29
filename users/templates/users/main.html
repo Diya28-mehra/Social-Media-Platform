@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocioBook Login</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+        .left, .right {
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .left {
+            flex: 1;
+            text-align: center;
+        }
+        .right {
+            flex: 1;
+        }
+        .main-heading {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #e83e8c;
+        }
+        .heading {
+            font-size: 1.25rem;
+            color: #6c757d;
+        }
+        .form {
+            max-width: 400px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form .form-label {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            color: #343a40; /* Darker color for the labels */
+            margin-bottom: 10px;
+            display: block;
+        }
+        .form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            font-size: 1rem;
+        }
+        .form input:focus {
+            border-color: #e83e8c;
+            outline: none;
+            box-shadow: 0 0 5px rgba(232, 62, 140, 0.5);
+        }
+        .form .btn-custom {
+            margin-top: 10px;
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background-color: #e83e8c;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+        }
+        .btn-primary:hover {
+            background-color: #d63384;
+        }
+        .btn-secondary {
+            background-color: #28a745;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+            padding: 8px 12px; /* Smaller button size */
+            font-size: 0.9rem; /* Slightly smaller font */
+        }
+        .btn-secondary:hover {
+            background-color: #218838;
+        }
+        .form p {
+            margin: 15px 0;
+            text-align: center;
+        }
+        .form a {
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            width: auto;
+            font-weight: bold;
+            color: #fff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <div class="main-heading">
+                SocioBook
+            </div>
+            <div class="heading">
+                SocioBook helps you connect and share with the people in your life.
+            </div>
+        </div>
+        <div class="right">
+            <div class="form" >
+                <form method="post" action="{% url 'home' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" user="password" placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-custom" >Login</button>
+                    <p>Don't have an account?</p>
+                    <a href="{% url 'register' %}" class="btn btn-secondary btn-custom">Create Account</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

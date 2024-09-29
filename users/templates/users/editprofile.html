@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom pink theme for buttons and form styling */
+        .btn-pink {
+            background-color: #e83e8c; /* Pink color */
+            color: white;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-pink:hover {
+            background-color: #ff85c2;  /* Slightly lighter pink on hover */
+        }
+
+        .form-label {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #f1f1f1;
+            padding: 10px;
+        }
+
+        .form-control:focus {
+            border-color: #e83e8c; /* Pink border on focus */
+            box-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
+        }
+
+        h2 {
+            font-family: 'Poppins', sans-serif;
+            color: #e83e8c; 
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .bg-white {
+            background-color: #fff;
+            border-radius: 10px;
+        }
+
+        .shadow-sm {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea.form-control {
+            resize: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>Edit Profile</h2>
+    
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <form method="POST" enctype="multipart/form-data" class="p-4 rounded shadow-sm bg-white">
+                {% csrf_token %}
+
+                <div class="form-group mb-3"></div>
+                    <label for="username" class="form-label">Username</label>
+                    <textarea id="username" name="username" class="form-control" rows="3">{{ profile.username }}</textarea>
+                </div>
+
+                <!-- Bio -->
+                <div class="form-group mb-3">
+                    <label for="bio" class="form-label">Bio</label>
+                    <textarea id="bio" name="bio" class="form-control" rows="3">{{ profile.bio }}</textarea>
+                </div>
+
+                <!-- First Name -->
+                <div class="form-group mb-3">
+                    <label for="first_name" class="form-label">First Name</label>
+                    <input type="text" id="first_name" name="first_name" class="form-control" value="{{ profile.first_name }}">
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-group mb-3">
+                    <label for="last_name" class="form-label">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" class="form-control" value="{{ profile.last_name }}">
+                </div>
+
+                <!-- Email -->
+                <div class="form-group mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" value="{{ profile.email }}">
+                </div>
+
+                <!-- Date of Birth -->
+                <div class="form-group mb-3">
+                    <label for="date_of_birth" class="form-label">Date of Birth</label>
+                    <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" value="{{ profile.date_of_birth }}">
+                </div>
+
+                <!-- Profile Photo -->
+                <div class="form-group mb-4">
+                    <label for="profile_photo" class="form-label">Profile Photo</label>
+                    <input type="file" id="profile_photo" name="profile_photo" class="form-control">
+                </div>
+
+                <!-- Save Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-pink btn-lg">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
