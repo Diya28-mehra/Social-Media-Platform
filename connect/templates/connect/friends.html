@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Connect with Friends</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .friend-status {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center">Connect with Friends</h1>
+
+    <h2>Incoming Friend Requests</h2>
+    <div class="list-group mb-4">
+        {% for request in friend_requests %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <span>{{ request.from_user.user.username }}</span>
+                <div>
+                    <form method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="request_id" value="{{ request.id }}">
+                        <button type="submit" name="accept_request" class="btn btn-success btn-sm">Accept</button>
+                        <button type="submit" name="delete_request" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </div>
+            </div>
+        {% empty %}
+            <div class="list-group-item">No incoming requests.</div>
+        {% endfor %}
+    </div>
+
+    <h2>All Profiles</h2>
+    <div class="list-group">
+        {% for profile in profiles %}
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <span>{{ profile.user.username }}</span>
+                <span class="friend-status">
+                    {% if profile in friends_profiles %}
+                        Already Friends
+                    {% elif profile in sent_requests %}
+                        Friend Request Sent
+                    {% elif profile in accepted_requests %}
+                        Friend Request Accepted
+                    {% else %}
+                        <form method="POST" action="{% url 'connect_with_friends' %}" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="to_user_id" value="{{ profile.id }}">
+                            <button type="submit" name="send_request" class="btn btn-primary btn-sm">Send Friend Request</button>
+                        </form>
+                    {% endif %}
+                </span>
+            </div>
+        {% empty %}
+            <div class="list-group-item">No profiles available.</div>
+        {% endfor %}
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

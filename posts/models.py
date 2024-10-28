@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
-    content = models.TextField(blank=True, null=True)  # Allow posts to be just photos or videos with no text
+    content = models.TextField(blank=True, null=True)  
     created_at = models.DateTimeField(auto_now_add=True)
-    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)  # Users who liked the post
+    likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
     photo = models.ImageField(upload_to='photos/', blank=True, null=True)
     video = models.FileField(upload_to='videos/', blank=True, null=True)
 

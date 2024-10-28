@@ -3,76 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>{{ profile.user.username }}'s Profile</title>
+    <title>User Profile</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .profile-container {
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ccc;
+        /* Custom styles */
+        body {
+            background-color: #f8f9fa; /* Light gray background */
+        }
+        .profile-card {
             border-radius: 10px;
-            background-color: #f9f9f9;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .profile-photo {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #007bff;
+            border-radius: 100%;
+            width: 400px;  /* Increased width */
+            height: 400px; /* Increased height */
+            object-fit: cover; /* Ensures the image covers the container */
             margin-bottom: 15px;
         }
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
+        h2 {
+            color: #e83e8c; /* Pink color */
         }
-        .stat {
+        .stats {
+            margin-top: 20px;
             text-align: center;
         }
-        .btn-custom {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .follower-list, .following-list {
+            list-style: none;
+            padding: 0;
         }
-        .btn-custom:hover {
-            background-color: #0056b3;
+        .follower-list li, .following-list li {
+            background: #e9ecef;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="profile-container text-center">
-            <h1>{{ profile.user.username }}</h1>
-            {% if profile.profile_photo %}
-                <img src="{{ profile.profile_photo.url }}" alt="Profile photo" class="profile-photo">
-            {% endif %}
-            <p class="lead">{{ profile.bio }}</p>
-            <div class="stats">
-                <div class="stat">
-                    <h5>Followers</h5>
-                    <p>{{ profile.user.followers.count }}</p>
-                </div>
-                <div class="stat">
-                    <h5>Following</h5>
-                    <p>{{ profile.user.following.count }}</p>
-                </div>
-                <div class="stat">
-                    <h5>Posts</h5>
-                    <p>{{ profile.user.posts.count }}</p>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="profile-card text-center">
+                <img src="{{ profile.profile_photo.url }}" alt="Profile Photo" class="profile-photo">
+                <h2>{{ profile.user.username }}</h2>
+                <p><strong>Bio:</strong> {{ profile.bio }}</p>
+                <p><strong>First Name:</strong> {{ profile.user.first_name }}</p>
+                <p><strong>Last Name:</strong> {{ profile.user.last_name }}</p>
+                <p><strong>Email:</strong> {{ profile.user.email }}</p>
+                <p><strong>Date of Birth:</strong> {{ profile.date_of_birth }}</p>
+                
+                <div class="stats">
+                    <h4>Followers: <span class="badge badge-info">{{ profile.followers.count }}</span></h4>
+                    <h4>Following: <span class="badge badge-info">{{ profile.following.count }}</span></h4>
                 </div>
             </div>
-            <a class="btn btn-custom mt-3" href="{% url 'edit_profile' %}">Edit Profile</a>
+
+            <div class="mt-4">
+                <h4>Followers</h4>
+                <ul class="follower-list">
+                    {% for follower in profile.followers.all %}
+                        <li>{{ follower.username }}</li>
+                    {% empty %}
+                        <li>No followers yet!</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="mt-4">
+                <h4>Following</h4>
+                <ul class="following-list">
+                    {% for following in profile.following.all %}
+                        <li>{{ following.username }}</li>
+                    {% empty %}
+                        <li>Not following anyone yet!</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

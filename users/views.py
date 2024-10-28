@@ -1,8 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib.auth.models import User
 from .models import Profile
 from datetime import datetime
+from posts.models import Post, Comment
+from django.contrib import messages
 
 def index(request):
     return render(request, 'users/main.html')
@@ -15,12 +17,6 @@ def register(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm_password')
-        dob_str = request.POST.get('date_of_birth')
-
-        try:
-            dob = datetime.strptime(dob_str, '%Y-%m-%d').date()
-        except ValueError:
-            return render(request, 'users/register.html', {'error': 'Invalid date of birth format'})
 
         if password == confirm_password:
             user = User.objects.create_user(
@@ -33,7 +29,6 @@ def register(request):
             
             Profile.objects.create(
                 user=user,
-                date_of_birth=dob
             )
             
             auth_login(request, user)
@@ -45,10 +40,10 @@ def register(request):
     return render(request, 'users/register.html')
 
 def login(request):
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+        print(username, password)
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
@@ -62,18 +57,14 @@ def login(request):
         else:
             print(f'Invalid username or password for {username}')
             return render(request, 'users/main.html', {'error': 'Invalid username or password'})
-    return render(request, 'users/main.html')
-
-def home(request):
-    profiles = Profile.objects.order_by('user__username')
-    return render(request,'users/home.html',{'profiles':profiles})
+    
 
 def editprofile(request):
     profile = request.user.profile
-    
+    print(profile)
     if request.method == 'POST':
         profile.bio = request.POST.get('bio', profile.bio)
-        profile.date_of_birth = request.POST.get('date_of_birth', profile.date_of_birth)
+        profile.date_of_birth = request.POST.get('date_of_birth')
         
         if request.FILES.get('profile_photo'):
             profile.profile_photo = request.FILES['profile_photo']
@@ -86,5 +77,54 @@ def editprofile(request):
         user.save()
         profile.save()
 
-        return redirect('profile')  
-    return render(request, 'users/editprofile.html', {'profile': profile})
+        return redirect('show_profile', profile_id=profile.id)
+
+    return render(request, 'users/editprofile.html',{'profile': profile})
+
+def home(request):
+    posts = Post.objects.all().order_by('-created_at')
+
+    if request.method == 'POST':
+        if 'like_post' in request.POST:
+            post_id = request.POST.get('like_post')
+            post = get_object_or_404(Post, id=post_id)
+
+            if request.user in post.likes.all():
+                post.likes.remove(request.user)  
+            else:
+                post.likes.add(request.user)  
+
+        elif 'comment_post' in request.POST:
+            post_id = request.POST.get('comment_post')
+            comment_content = request.POST.get('comment_content')
+            post = get_object_or_404(Post, id=post_id)
+
+            if comment_content:
+                Comment.objects.create(
+                    user=request.user,
+                    post=post,
+                    content=comment_content
+                )
+        return redirect('home')
+
+    return render(request, 'users/home.html', {'posts': posts})
+
+def add_post(request):
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        photo = request.FILES.get('photo')
+        video = request.FILES.get('video')
+
+        # Create a new Post object
+        post = Post(
+            user=request.user,
+            content=content,
+            photo=photo if photo else None,
+            video=video if video else None
+        )
+        post.save()
+
+        messages.success(request, 'Your post has been added successfully!')
+        return redirect('home')
+
+    return render(request, 'users/add_post.html')
