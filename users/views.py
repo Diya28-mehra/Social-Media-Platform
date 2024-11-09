@@ -5,6 +5,7 @@ from .models import Profile
 from datetime import datetime
 from posts.models import Post, Comment
 from django.contrib import messages
+from django.contrib.auth import logout as auth_logout
 
 def index(request):
     return render(request, 'users/main.html')
@@ -40,9 +41,9 @@ def register(request):
     return render(request, 'users/register.html')
 
 def login(request):
-        if request.method == 'POST':
-            username = request.POST.get('username')
-            password = request.POST.get('password')
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
         print(username, password)
         user = authenticate(request, username=username, password=password)
 
@@ -57,11 +58,17 @@ def login(request):
         else:
             print(f'Invalid username or password for {username}')
             return render(request, 'users/main.html', {'error': 'Invalid username or password'})
-    
+    return render(request, 'users/main.html')
+
+        
+def logout(request):
+    auth_logout(request)  # Log out the user
+    print("User logged out successfully.")
+    return redirect('login')  # Redirect to login page or any other desired page
+
 
 def editprofile(request):
     profile = request.user.profile
-    print(profile)
     if request.method == 'POST':
         profile.bio = request.POST.get('bio', profile.bio)
         profile.date_of_birth = request.POST.get('date_of_birth')
@@ -77,7 +84,7 @@ def editprofile(request):
         user.save()
         profile.save()
 
-        return redirect('show_profile', profile_id=profile.id)
+        return redirect('show_profile', user_id=user.id)
 
     return render(request, 'users/editprofile.html',{'profile': profile})
 
@@ -128,3 +135,4 @@ def add_post(request):
         return redirect('home')
 
     return render(request, 'users/add_post.html')
+
